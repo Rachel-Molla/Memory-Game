@@ -28,17 +28,11 @@ public class GameBoard {
 	
 	void setGameBoard( String frontStr, String[] backStrArr ) {
 		
-		setEmptyBoard();
+		this.setEmptyBoard();
 
-		printGameBoard();
-
-		setTickets( frontStr );
-
-		printGameBoard();
+		this.setTickets( frontStr );
 						
-		setBackTickets( backStrArr );
-		
-		printGameBoard();
+		this.setBackTickets( backStrArr );
 		
 	}
 	
@@ -55,13 +49,16 @@ public class GameBoard {
 	//print two Dimensional Array
 	void printGameBoard(){
 	
+		System.out.println();
+
 		for ( Ticket[] innerArr : this.gameBoard) {
 			
 			System.out.println( Arrays.toString( innerArr ) );
 		
 		}
-		System.out.println();
 		
+		System.out.println();
+
 	}
 	
 	
@@ -92,8 +89,8 @@ public class GameBoard {
 				
 				do {
 					
-					randRow = randomNum( rows );
-					randCol = randomNum( columns );
+					randRow = this.randomNum( rows );
+					randCol = this.randomNum( columns );
 										
 				} while ( this.gameBoard[ randRow ][ randCol ].getBackTicket() !=  null );
 				
@@ -113,7 +110,7 @@ public class GameBoard {
 	
 	boolean fullBoard() {
 		
-		for ( Ticket[]  innerArr : gameBoard ) {
+		for ( Ticket[]  innerArr : this.gameBoard ) {
 			
 			for ( Ticket ticket : innerArr) {
 			

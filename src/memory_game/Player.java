@@ -65,15 +65,6 @@ public class Player {
 	
 	}	
 	
-	
-	int[] chooseTicketLocation() {
-		
-		int[] ticketLocation = { getPlayerNumber( "row" ) , getPlayerNumber( "column" ) };
-						
-		return ticketLocation;
-	
-	}
-	
 
 	void increaseScore() {
 		

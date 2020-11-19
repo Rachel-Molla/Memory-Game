@@ -73,7 +73,7 @@ public class MemoryGame {
 	
 		}
 		
-		printPlayers();
+		this.printPlayers();
 				
 	}
 	
@@ -96,17 +96,17 @@ public class MemoryGame {
 		
 		String frontStr = this.currentPlayer.getPlayerString( "that will fill the front tickets" ) ;
 
-		String[] backStrings = this.getBackStrings();
+		String[] backStrings = this.getBackStrings( rows, columns );
 		
 		// set the game board
 		this.board = new GameBoard( rows, columns, frontStr, backStrings );
-				
+		
 	}
 
 	
-	String[] getBackStrings(){
+	String[] getBackStrings( int rows, int columns ){
 		
-		int numOfStrings = ( this.board.rows * this.board.columns ) / 2 ;
+		int numOfStrings = ( rows * columns ) / 2 ;
 		
 		String[] backStrings = new String[ numOfStrings ];
 		
@@ -125,15 +125,21 @@ public class MemoryGame {
 	
 	void startPlay() {
 	
-		for ( Player player : this.players ) { 
+		this.board.printGameBoard();
 		
-			setCurrentPlayer( player );
-			play();
+		while ( ! this.board.fullBoard() ) {
+			
+			for ( Player player : this.players ) { 
+		
+				setCurrentPlayer( player );
+				play();
 				
-			if  ( this.board.fullBoard() != true)  
+				if  ( this.board.fullBoard() )  
 				
 				break;
 		
+			}
+			
 		}
 	
 	}
@@ -151,7 +157,7 @@ public class MemoryGame {
 			secondTicket =  this.twoTickets[1];
 			
 			checkTickets( firstTicket, secondTicket);
-		
+								
 		} while ( this.equalTickets( firstTicket, secondTicket ) &&  this.board.fullBoard() != true );
 				
 	}
@@ -191,11 +197,11 @@ public class MemoryGame {
 		
 		Ticket choosenTicket; 
 		
-		System.out.println( "\nchoose ticket row between 1 to " + this.board.rows + " : ");
+		System.out.println( "choose ticket row between 1 to " + this.board.rows + " : ");
 		
 		int rowTicket = this.currentPlayer.getPlayerNumber( "row" );
 		
-		System.out.println( "\nchoose ticket column between 1 to " + this.board.columns + " : " ); 
+		System.out.println( "choose ticket column between 1 to " + this.board.columns + " : " ); 
 
 		int colTicket = this.currentPlayer.getPlayerNumber( "column" );
 				
@@ -212,17 +218,19 @@ public class MemoryGame {
 						
 			this.currentPlayer.increaseScore();
 			
+			this.printPlayers();
+
 		} else {
 			
 			firstTicket.turnVisibleSide();
 			
 			secondTicket.turnVisibleSide();
-			
+
+			this.printPlayers();
+
+			this.board.printGameBoard();
+
 		}
-						
-		this.board.printGameBoard();
-		
-		printPlayers();
 		
 	}
 

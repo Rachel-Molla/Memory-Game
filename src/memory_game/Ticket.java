@@ -60,6 +60,7 @@ public class Ticket {
 	int getTicketColIndex() {
 		
 		return this.colIndex;
+	
 	}
 	
 
@@ -74,7 +75,7 @@ public class Ticket {
 			this.visibleSide = this.front;
 		}
 		
-		turnChoose();
+		this.turnChoose();
 	
 	}
 	
