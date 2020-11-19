@@ -39,6 +39,7 @@ public class GameBoard {
 		setBackTickets( backStrArr );
 		
 		printGameBoard();
+		
 	}
 	
 
@@ -51,26 +52,14 @@ public class GameBoard {
 	}
 	
 	
-	int getNumOfRows() {
-		
-		return this.rows;
-		
-	}
-	
-	
-	int getNumOfCols() {
-		
-		return this.columns;
-		
-	}	
-	
 	//print two Dimensional Array
 	void printGameBoard(){
 	
-		for ( Ticket[] innerArr : gameBoard) 
+		for ( Ticket[] innerArr : this.gameBoard) {
 			
-			System.out.println( Arrays.toString( innerArr ));
+			System.out.println( Arrays.toString( innerArr ) );
 		
+		}
 		System.out.println();
 		
 	}
@@ -78,23 +67,16 @@ public class GameBoard {
 	
 	void setTickets( String frontStr ) {
 
-		for ( int i = 0 ; i < rows ; i++ ) {
+		for ( int i = 0 ; i < this.rows ; i++ ) {
 			
-			for ( int j = 0 ; j < columns ; j++ ) 
+			for ( int j = 0 ; j < this.columns ; j++ ) 
 		
-				gameBoard[i][j] = new Ticket( i, j ,frontStr );
+				this.gameBoard[i][j] = new Ticket( i, j ,frontStr );
 			
 		}
 		
 	}
 	
-	
-	int randomNum( int maxNum ) {
-		
-		return rnd.nextInt( maxNum );
-		
-	}
-
 	
 	void setBackTickets(String[] strArr) {
 		
@@ -113,56 +95,39 @@ public class GameBoard {
 					randRow = randomNum( rows );
 					randCol = randomNum( columns );
 										
-				} while ( gameBoard[ randRow ][ randCol ].getBackTicket() !=  null );
+				} while ( this.gameBoard[ randRow ][ randCol ].getBackTicket() !=  null );
 				
-				gameBoard[ randRow ][ randCol ].setBackTicket( currentStr ) ;
+				this.gameBoard[ randRow ][ randCol ].setBackTicket( currentStr ) ;
 				
 			}
 		}
 	}
 	
 	
-	
-	
-	void checkTickets( Ticket firstTicket , Ticket secondTicket ) {
+	int randomNum( int maxNum ) {
 		
-					
-		} else {
-			
-			firstTicket.turnVisibleSide();
-			
-			secondTicket.turnVisibleSide();
-			
-		}
-						
-		printGameBoard();
-				
+		return this.rnd.nextInt( maxNum );
+		
 	}
 
-
-
-	//check if two tickets equal. if they are, return true. if not return false.
-	boolean equalTickets( Ticket first , Ticket second ) {
-
-		return first.getBackTicket() == second.getBackTicket() ;
-	
-	}
-	
-	
 	
 	boolean fullBoard() {
 		
 		for ( Ticket[]  innerArr : gameBoard ) {
+			
 			for ( Ticket ticket : innerArr) {
 			
 				if ( ! ticket.isChoosen() )
+			
 					return false;
 			
 			}
+			
 		}
 		
 		return true;
 
 	}	
+
 	
 }
