@@ -6,7 +6,7 @@ The project contain memory-game manager, game-board with tickets and number of p
 each player choose two tickets on his turn, if theirs back-side identical, 
 then his score increase in 1 and he have another turn. 
 
-the winner is the one with the most high score.
+the winner is the one with the highest score.
 
 for running this project locally, do the next steps:
   - install java JDK( with JAVA_HOME) on your coumputer
