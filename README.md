@@ -11,7 +11,8 @@ the winner is the one with the highest score.
 for running this project locally, do the next steps:
   - install Java Development Kit ( JDK with JAVA_HOME ) on your computer
   - install Eclipse IDE 
-  - from the repo, clone this project locally
+  - from the repo, clone this project locally 
+    ( explanation how to do that : https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/cloning-a-repository )
   - run the project
   - invite friends and start play in the console.
   
