@@ -9,7 +9,7 @@ then his score increase in 1 and he have another turn.
 the winner is the one with the highest score.
 
 for running this project locally, do the next steps:
-  - install java JDK( with JAVA_HOME) on your computer
+  - install Java Development Kit ( JDK with JAVA_HOME) on your computer
   - install Eclipse IDE 
   - from the repo, clone this project locally
   - run the project
