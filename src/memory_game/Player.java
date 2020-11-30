@@ -1,71 +1,21 @@
 package memory_game;
 
-import java.util.Scanner;
-
-public class Player {
-
-	Scanner input = new Scanner( System.in );
+public class Player extends User {
 	
-	String name;
-	
-	int index;
+	int playerNumber;
 	
 	int score = 0;
 	
 	
-	public Player( int index ) {
+	public Player( int playerNumber, String name ) {
 		
-		this.index = index;
+		this.playerNumber = playerNumber ;
 		
-		this.setName( index + 1 );
-		
+		this.name = name;
+						
 	}
 	
 	
-	void setName( int playerNumber ) {
-		
-		System.out.print( "Please insert player " + playerNumber + " name : " ) ;
-		
-		this.name = input.nextLine();
-		
-	}
-	
-	
-	String getName(){
-	
-		return this.name;
-	
-	}
-	
-	
-	int getPlayerNumber( String numUse ) {
-		
-		System.out.print( this.name +", please insert number of " + numUse + " you want : " );
-		
-		int playerNum = input.nextInt();
-		
-		return playerNum;
-	
-	}
-	
-
-	String getPlayerString( String strUse ){
-		
-		String playerStr;
-		
-		System.out.print( "Please insert string " + strUse + " : " ) ;
-
-		do {
-			
-			playerStr = input.nextLine();
-
-		} while ( playerStr.isEmpty() ); 
-
-		return playerStr;
-	
-	}	
-	
-
 	void increaseScore() {
 		
 		this.score++ ;
@@ -76,7 +26,7 @@ public class Player {
 	@Override
 	public String toString() {
 		
-		return this.name + " : " + this.score ;
+		return "player " + this.playerNumber + " - " + this.name + " : " + this.score ;
 		
 	}
 	

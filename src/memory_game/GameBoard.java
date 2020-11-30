@@ -45,7 +45,7 @@ public class GameBoard {
 
 	}
 	
-	
+
 	//print two Dimensional Array
 	void printGameBoard(){
 	
@@ -108,7 +108,7 @@ public class GameBoard {
 	}
 
 	
-	boolean fullBoard() {
+	boolean allTicketsOpposite() {
 		
 		for ( Ticket[]  innerArr : this.gameBoard ) {
 			
@@ -125,6 +125,6 @@ public class GameBoard {
 		return true;
 
 	}	
-
+	
 	
 }

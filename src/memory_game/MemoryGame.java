@@ -1,11 +1,12 @@
 package memory_game;
 
 import java.util.Arrays;
-import java.util.Scanner;
+
+import java.util.ArrayList;
 
 public class MemoryGame {
 
-	Scanner input = new Scanner( System.in );
+	User manager = new User() ;
 	
 	int numOfPlayers;
 	
@@ -15,15 +16,12 @@ public class MemoryGame {
 	
 	GameBoard board;
 	
-	Ticket[] twoTickets = new Ticket[2];
-
-	
-	public MemoryGame() {
-		
-	}
+	Ticket firstChoosenTicket , secondChoosenTicket ;
 	
 	
 	void start() {
+		
+		setManager();
 		
 		setPlayers();
 		
@@ -36,70 +34,87 @@ public class MemoryGame {
 	}
 
 	
+	void setManager() {
+		
+		this.manager.setName();
+		
+	}
+	
+	
 	void setPlayers() {
 		
-		setNumberOfPlayers();
+		this.setNumberOfPlayers();
 		
-		setPlayersList();
-		
-		setNamePlayers();
-		
-		setCurrentPlayer( this.players[0] );
-				
+		this.setPlayersList();
+								
 	}
 	
 	
 	void setNumberOfPlayers() {
-		
-		System.out.print( "Please insert number of players : " );
-		
-		this.numOfPlayers = input.nextInt();
+			
+		this.numOfPlayers = this.manager.choosePositiveNumber( "players" );
 				
 	}
-	
+
 	
 	void setPlayersList() {
 		
-		this.players = new Player[ numOfPlayers ];
+		this.players = new Player[ this.numOfPlayers ];
 		
-	}
-	
-	
-	void setNamePlayers() {
-				
+		int playerNumber;
+		
+		String playerName;
+
 		for ( int i = 0 ; i < this.numOfPlayers ; i++) {
 			
-			this.players[i] = new Player( i );
-	
+			playerNumber = i + 1 ;
+			
+			playerName = this.manager.chooseString( "player number " + playerNumber + " name" ); 
+			
+			this.players[i] = new Player( playerNumber, playerName );
+			
 		}
-		
-		this.printPlayers();
 				
-	}
-	
-	
-	void setCurrentPlayer( Player player) {
-		
-		this.currentPlayer = player;
-	
 	}
 	
 	
 	void setBoard() {
 	
 		int rows, columns;
-		// set rows
-		rows = this.currentPlayer.getPlayerNumber( "rows" );
-
-		// set columns
-		columns = this.currentPlayer.getPlayerNumber( "columns" );
 		
-		String frontStr = this.currentPlayer.getPlayerString( "that will fill the front tickets" ) ;
+		System.out.println( "Memory-game board will contain even number of tickets. therefore number of rows or columns must be even.");
+
+		do {
+			
+			// set rows
+			rows = this.manager.choosePositiveNumber( "game board rows" );
+
+			// set columns
+			columns = this.manager.choosePositiveNumber( "game board columns" );
+		
+		} while ( ! validEvenNumberOfTickets ( rows, columns ) );
+
+		String frontStr = this.manager.chooseString( "string that will fill the front side of board game tickets" );
 
 		String[] backStrings = this.getBackStrings( rows, columns );
 		
 		// set the game board
 		this.board = new GameBoard( rows, columns, frontStr, backStrings );
+		
+	}
+	
+	
+	boolean validEvenNumberOfTickets( int numberOfRows, int numberOfColumns) {
+		
+		if ( numberOfRows * numberOfColumns % 2 != 0 ) {
+			
+			System.out.println( "there is not a even number of tickets, try again.");
+			
+			return false;
+			
+		}
+		
+		return true;
 		
 	}
 
@@ -112,12 +127,10 @@ public class MemoryGame {
 		
 		for ( int i = 0 ; i < numOfStrings ; i++ ) {
 
-			backStrings[i] = this.currentPlayer.getPlayerString( "that will fill the back ticket" ) ;
+			backStrings[i] = this.manager.chooseString( "string that will fill the back side of pair tickets" ) ;
 			
 		}
-		
-		System.out.println( Arrays.toString( backStrings ) );
-		
+				
 		return backStrings;
 		
 	}
@@ -127,17 +140,16 @@ public class MemoryGame {
 	
 		this.board.printGameBoard();
 		
-		while ( ! this.board.fullBoard() ) {
+		this.printPlayers();
+
+		while ( ! this.board.allTicketsOpposite() ) {
 			
 			for ( Player player : this.players ) { 
 		
-				setCurrentPlayer( player );
-				play();
+				this.setCurrentPlayer( player );
 				
-				if  ( this.board.fullBoard() )  
+				this.currentPlayerTurn();
 				
-				break;
-		
 			}
 			
 		}
@@ -145,35 +157,52 @@ public class MemoryGame {
 	}
 	
 
-	void play() {
+	void setCurrentPlayer( Player player ) {
 		
-		Ticket firstTicket , secondTicket ;
-		
-		do {
-			
-			chooseTwoTickets() ;
-			
-			firstTicket = this.twoTickets[0];
-			secondTicket =  this.twoTickets[1];
-			
-			checkTickets( firstTicket, secondTicket);
-								
-		} while ( this.equalTickets( firstTicket, secondTicket ) &&  this.board.fullBoard() != true );
-				
+		this.currentPlayer = player;
+	
 	}
+	
+	
+	void currentPlayerTurn() {
 		
+		if ( ! this.board.allTicketsOpposite() ) {
+							
+			this.currentPlayerPlay();
+										
+		}
+		
+	}
+	
+	
+	void currentPlayerPlay() {
+		
+		this.chooseTwoTickets() ;
+		
+		this.checkChoosenTickets();
+	
+	}
+	
 	
 	void chooseTwoTickets() {
 
-		for ( int i = 0 ; i < 2 ; i++ ) {
-			
-			this.twoTickets[i] = chooseValidTicket() ;
+		this.firstChoosenTicket = this.chooseOneTicket();
+		this.secondChoosenTicket = this.chooseOneTicket();
 		
-			this.twoTickets[i].turnVisibleSide();
-
-			this.board.printGameBoard();
-
-		}
+	}
+	
+	
+	Ticket chooseOneTicket() {
+		
+		Ticket currentChoosenTicket;
+		
+		currentChoosenTicket = this.chooseValidTicket();
+		
+		currentChoosenTicket.turnVisibleSide();
+		
+		this.board.printGameBoard();
+		
+		return currentChoosenTicket;
 		
 	}
 	
@@ -184,26 +213,36 @@ public class MemoryGame {
 		
 		do {
  
-			ticket = chooseTicket();
+			ticket = this.chooseTicket();
 			
-		} while (  ticket.isChoosen() );
+		} while (  isTicketChoosen( ticket ) );
 				
 		return ticket;
 		
 	}
-
 	
+	
+	boolean isTicketChoosen( Ticket ticket ) {
+		
+		if ( ticket.isChoosen() ) {
+			
+			System.out.println( "This ticket already choosen. please choose another ticket.");
+			
+			return true; 
+		}
+		
+		return false;
+		
+	}
+	
+
 	Ticket chooseTicket() {
 		
 		Ticket choosenTicket; 
+				
+		int rowTicket = this.ChooseTicketLocationComponent( "row" , this.board.rows );
 		
-		System.out.println( "choose ticket row between 1 to " + this.board.rows + " : ");
-		
-		int rowTicket = this.currentPlayer.getPlayerNumber( "row" );
-		
-		System.out.println( "choose ticket column between 1 to " + this.board.columns + " : " ); 
-
-		int colTicket = this.currentPlayer.getPlayerNumber( "column" );
+		int colTicket = this.ChooseTicketLocationComponent( "column" , this.board.columns );
 				
 		choosenTicket = this.board.gameBoard[ rowTicket-1 ][ colTicket-1 ];
 				
@@ -212,21 +251,50 @@ public class MemoryGame {
 	}
 
 	
-	void checkTickets( Ticket firstTicket , Ticket secondTicket ) {
+	int ChooseTicketLocationComponent( String componentLocationName, int maxComponenetLocation ) {
 		
-		if ( equalTickets( firstTicket, secondTicket) ) {
+		int choosenLocationComponent;
+		
+		do {
+		
+			choosenLocationComponent = this.currentPlayer.choosePositiveNumber( componentLocationName );
+			
+		} while ( ! numberInValidRange( choosenLocationComponent, componentLocationName, maxComponenetLocation  ) ) ;
+		
+		return choosenLocationComponent;
+		
+	}
+	
+	
+	boolean numberInValidRange( int num,  String componentNumName,  int maxRange ) {
+		
+		if ( num < 1 || num > maxRange) {
+			
+			System.out.print( "That's not a valid " + componentNumName + ", try again. " );
+			
+			return false;
+		}
+		
+		return true;
+		
+	}
+	
+	
+	void checkChoosenTickets() {
+		
+		if ( equalTickets( this.firstChoosenTicket, this.secondChoosenTicket ) ) {
 						
 			this.currentPlayer.increaseScore();
 			
 			this.printPlayers();
+			
+			this.currentPlayerTurn();
 
 		} else {
 			
-			firstTicket.turnVisibleSide();
+			this.firstChoosenTicket.turnVisibleSide();
 			
-			secondTicket.turnVisibleSide();
-
-			this.printPlayers();
+			this.secondChoosenTicket.turnVisibleSide();
 
 			this.board.printGameBoard();
 
@@ -248,31 +316,52 @@ public class MemoryGame {
 		System.out.println( Arrays.toString( this.players ) );
 
 	}
-
 	
-	Player getWinner() {
+	
+	int getHighestScore() {
 		
-		Player winner = players[0];
+		int highScore = 0 ;
 		
-		for ( int i = 1 ; i < numOfPlayers ; i++) {
+		for ( Player player : this.players ) {
 			
-			if ( players[i].score > winner.score ) { 
+			if ( player.score > highScore ) { 
 
-				winner = players[i];
+				highScore = player.score ;
 
 			}
 
 		}	
 		
-		return winner;
+		return highScore;
+
+	}
+	
+	
+	ArrayList<String> getWinnersNames() {
+		
+		int highestScore = getHighestScore() ;
+		
+		ArrayList<String> winnersNames = new ArrayList<String>() ;  
+		
+		for ( Player player : this.players ) {
+			
+			if ( player.score == highestScore) {
+				
+				winnersNames.add( player.name );
+				
+			}
+			
+		}
+		
+		return winnersNames;
 
 	}
 	
 	
 	void gameFinish() {
 		
-		System.out.println( "Congratulations! " +  getWinner().name + ", you win.");
-
+		System.out.println( "\nCongratulations! " +  this.getWinnersNames() + ", you win.");
+		
 	}
 	
 }
